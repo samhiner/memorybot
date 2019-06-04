@@ -1,5 +1,13 @@
 import threading
 import time
+import cv2
+
+while True:
+	print('asshole')
+	if cv2.waitKey(1) & 0xFF == ord('q'):
+		print('asddas')
+		break
+
 
 #random expensive function
 def prime_factorize(letter):
@@ -27,6 +35,7 @@ def wee():
 				prime_factorize(x)
 				prime_factorize(y)
 				prime_factorize(z)
+		print('running')
 
 
 def timelimit(secs):
@@ -39,8 +48,6 @@ thread1.start()
 thread2.start()
 
 from timeit import default_timer as timer
-#TODO redo this with imported file so that the time that it takes to set up the Disintegrate function is counted
-#TODO make Disintegrate function-specific if you want
 startTime = timer()
 
 
@@ -49,10 +56,10 @@ while True:
 	print(thread2.is_alive())
 
 	if not thread1.is_alive():
-		#should kill both?
+		#no such thing as thread2.stop(). Prob have to use Queue to get data out early/to end thread
 		break
 	elif not thread2.is_alive():
-		#should kill both?
+		#no such thing as thread1.stop(). Prob have to use Queue to get data out early/to end thread
 		break
 
 
