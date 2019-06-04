@@ -1,0 +1,6 @@
+*
+!.gitignore
+!audio
+!knowns
+!unknowns
+!directory.txt
