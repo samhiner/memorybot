@@ -27,7 +27,7 @@ def scan_person():
 		rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA) #TODO is this necessary? I forgot what it does.
 		person, encoding = identify.identify(frame)
 		#if it is a list it is "unknown" or "no faces"
-		if person != 'no faces' and person != 'unknown':	#maybe save unknown images where there was a face so if last one doesn't find a face we can still do it. 
+		if person != 'no faces':						#maybe save unknown images where there was a face so if last one doesn't find a face we can still do it. 
 			break										#maybe don't check 5 times as it's like p-hacking. Will have to see how accuracy is affected when done.
 		else:
 			print('No face found; error code: ' + person)
@@ -51,8 +51,8 @@ def scan_person():
 			#save encoding to knowns file
 			np.save((os.path.join('assets', 'knowns', filename) + '.npy'), encoding) #TODO learn more about os.path.join. Do I want my standard to be "/" or that?
 		else: #if you double click
-			unix_time = str(datetime.datetime.utcnow().timestamp()) #utc timezone to avoid overwriting pictures when switching timezones
-			np.save((os.path.join('assets', 'knowns', filename) + '.npy'), encoding) #TODO change this to store face encodings if they are saved for later to speed it up when this is classified
+			unix_time = str(int(datetime.datetime.utcnow().timestamp())) #utc timezone to avoid overwriting pictures when switching timezones
+			np.save((os.path.join('assets', 'unknowns', unix_time) + '.npy'), encoding) #TODO change this to store face encodings if they are saved for later to speed it up when this is classified
 			return
 	else:
 		say(get_info(int(person)))

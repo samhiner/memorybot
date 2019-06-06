@@ -10,7 +10,7 @@ def get_face_by_size(face_locations):
 	for x in range(len(face_locations)):
 		coords = face_locations[x]
 
-		face_size = math.sqrt((coords[0] - coords[2])**2 + (coords[1] + coords[3]))
+		face_size = math.sqrt((coords[0] - coords[2])**2 + (coords[1] - coords[3])**2)
 		if face_size > largest[0]:
 			largest = [face_size, x]
 		elif face_size > next_largest[0]:
@@ -54,10 +54,17 @@ def identify(unknown_picture):
 	unknown_face = fr.face_encodings(unknown_picture)[index]
 
 	with open('assets/directory.txt') as file:
+		best_match = [None, 1]
 		for line in file:
 			curr_id = line.split(',')[0]
 			known_face = np.load((os.path.join('assets', 'knowns', curr_id) + '.npy'))
-			if fr.compare_faces([known_face], unknown_face)[0]:
+			dist = fr.face_distance([known_face], unknown_face)
+			if dist <= 0.5:
 				return curr_id, None
+			elif dist <= 0.6 and dist < best_match[1]:
+				best_match = [curr_id, dist]
 
-		return 'unknown', unknown_face
+		if best_match[0] == None:
+			return 'unknown', unknown_face
+		else:
+			return best_match[0], None
